@@ -1,0 +1,56 @@
+1. Which classes are aggregates of other classes? Checking all constructors of whole classes if they initialize for their parts?
+- The Book and CompactDisc classes are considered aggregates of other classes in the AimsProject project. Specifically:
+- Book class:
++ This class contains an ArrayList of authors.
++ The constructors of this class initialize the title, category, cost fields, and manage the list of authors by adding or removing authors from the ArrayList.
+- CompactDisc class:
++ This class has an ArrayList containing Track objects.
++ The constructors of this class initialize the title, artist, category, director, cost fields, and manage the list of tracks by adding or removing Track objects from the ArrayList.
+2. When overriding the equals() method of the Object class, you will have to cast the Object parameter obj to the type of Object that you are dealing with. For example, in the Media class, you must cast the Object obj to a Media, and then check the equality of the two objects’ attributes as the
+above requirements (i.e. title for Media; title and length for Track). If the passing object is not an instance of Media, what happens?
+- If the passing object is not an instance of Media, it means that the comparison cannot be made accurately between two different types of objects. In such cases, the equals() method should return false to indicate that the objects are not equal because they belong to different classes and hence cannot be considered equal based on the comparison logic defined within the equals() method for the Media class.
+3. Question: Alternatively, to compare items in the cart, instead of using Comparator, we can use the Comparable interface and override the compareTo()method. You can refer to the Java docs to see the information of this interface.
+
+Suppose we are taking this Comparable interface approach.
+
+- What class should implement the Comparable interface?
++ The classes that should implement the Comparable interface are those for which we want to define a natural ordering. For instance, MediaComparatorByCostTitle and MediaComparatorByTitleCost
+- In those classes, how should you implement the compareTo()method be to reflect the ordering that we want?
++ We should compare in order of title or price, length ...
+- Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach?
++ No, with the Comparable interface, you can define only one natural ordering for a class. The compareTo() method provided by the Comparable interface allows you to establish a single sorting criterion.
+- Suppose the DVDs has a different ordering rule from the other media types, that is by title, then decreasing length, then cost. How would you modify your code to allow this?
++ add class
+import java.util.Comparator;
+
+public class MediaComparator implements Comparator<Media> {
+    @Override
+    public int compare(Media media1, Media media2) {
+        // First, compare by title
+        int titleComparison = media1.getTitle().compareTo(media2.getTitle());
+        if (titleComparison != 0) {
+            return titleComparison;
+        }
+        
+        // If titles are the same, compare by decreasing length
+        int lengthComparison = Integer.compare(media2.getLength(), media1.getLength());
+        if (lengthComparison != 0) {
+            return lengthComparison;
+        }
+        
+        // If lengths are also the same, compare by cost
+        return Float.compare(media1.getCost(), media2.getCost());
+    }
+}
+
+public class Media implements Comparable<Media> {
+    // Other attributes and methods of the Media class
+    
+    @Override
+    public int compareTo(Media otherMedia) {// Implement default comparison logic for Media here
+        // For example, you might sort by a specific criterion
+        // This method defines the default sorting behavior for Media
+        
+        // Return the comparison result based on the defined sorting rule
+    }
+}
