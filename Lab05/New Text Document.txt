@@ -1,2 +1,0 @@
-- The Aims class must be updated to handle any exceptions generated when the play() methods are called. What happens when you don’t update for them to catch?
-If exceptions are not caught or handled within the play() methods, they might propagate up the call stack. This can lead to uncaught exceptions at runtime. When an exception is not handled, it will cause the program to terminate abruptly, leading to potential crashes or unexpected behavior.
